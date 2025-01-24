@@ -1,6 +1,6 @@
 # Call of Duty Specular Image Name Fixer
 
-This tool helps you to quickly fix the names of specular images for Call of Duty textures. It identifies specular maps (usually with keywords like `_spec`, `_spc`, or `_s` in the filename) and renames them according to a specific format, while also generating new cosine maps (`_cos`) based on the alpha channel.
+This tool helps you to quickly fix the names of specular images for Call of Duty textures. It identifies specular maps (usually with keywords like `_spec`, `_spc`, or `_s` in the filename) and renames them according to a specific format, while also generating new cosine maps (`_cos`) based on the alpha channel.( Does not work for Black Ops games )
 
 ## Features:
 - Automatically renames specular textures to match the required format.
