@@ -31,7 +31,7 @@ This tool helps you to quickly fix the names of specular images for Call of Duty
 - If you prefer running the application:
   - Place your images in `_input` folder , if not there , exe will generate automtically.
   - Restart the application after having the images in `_input` folder.
-  - The program will ask you to place your images into the `_input` folder, and it will process them accordingly.
+  - The program will process the images accordingly.
 
 ### 4. What Happens During Processing
 - The tool will look for filenames containing keywords like `_spec`, `_spc`, or `_s`.
