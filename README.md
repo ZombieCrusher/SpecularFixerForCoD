@@ -19,7 +19,7 @@ This tool helps you to quickly fix the names of specular images for Call of Duty
 - Extract the folder and keep it in an easily accessible location.
 
 ### 2. Prepare the Images
-- Place all the specular images (which usually have names like `delta_alpha_a_spc.png`) into the folder named `_input`.
+- Place all the specular images (which usually have names like `~delta_alpha_a_spc-rgb&delta_~155668f1.png`) into the folder named `_input`.
 - If you don't have an `_input` folder, the program will create it automatically.
 
 ### 3. Run the Tool
