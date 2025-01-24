@@ -15,7 +15,7 @@ This tool helps you to quickly fix the names of specular images for Call of Duty
 ## Getting Started:
 
 ### 1. Download the Tool
-- Download the tool from the provided source.
+- Download the tool from the release section.
 - Extract the folder and keep it in an easily accessible location.
 
 ### 2. Prepare the Images
