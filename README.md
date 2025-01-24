@@ -35,7 +35,7 @@ This tool helps you to quickly fix the names of specular images for Call of Duty
 
 ### 4. What Happens During Processing
 - The tool will look for filenames containing keywords like `_spec`, `_spc`, or `_s`.
-- It will rename these images to a simpler format (e.g., `~delta_alpha_a_spc-rgb&delta_~155668f1.png` becomes `delta_alpha_a.png`).
+- It will rename these images to a simpler format (e.g., `~delta_alpha_a_spc-rgb&delta_~155668f1.png` becomes `delta_alpha_a_spc.png`).
 - A new file (`_cos.png`) will be generated, which contains the alpha channel extracted from the specular map.
 
 ### 5. Output
