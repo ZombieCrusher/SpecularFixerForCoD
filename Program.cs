@@ -2,7 +2,6 @@
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SpecularNameFixer
@@ -13,10 +12,12 @@ namespace SpecularNameFixer
         private static readonly string[] keywords = { "_spec", "_spc", "_s" };
 
         // Exclusions (to skip non-specular textures, only if they are at the end of the filename)
-        private static readonly string[] exclusions = { "_col", "_cos", "_nml" };
+        private static readonly string[] exclusions = { "_col", "_cos", "_nml" , "_c" , "_n" };
 
         // Supported image extensions
         private static readonly string[] allowedExtensions = { ".png", ".dds", ".tiff", ".tga" };
+
+        private static int specularConvertCount = 0, cosineConvertCount = 0;
 
         public static void Main(string[] args)
         {
@@ -39,8 +40,6 @@ namespace SpecularNameFixer
             {
                 Directory.CreateDirectory(outputFolder);
             }
-
-            int processedFilesCount = 0;
 
             foreach (string filePath in args)
             {
@@ -73,6 +72,9 @@ namespace SpecularNameFixer
                 // Apply transformation to the file name
                 string transformedFileName = TransformFileName(fileName);
 
+                // Log the transformation from original to the transformed name
+                Console.WriteLine($"File processed: {fileName} -> {transformedFileName}");
+
                 // Create the output path for the renamed `_spc` file
                 string transformedSpcPath = Path.Combine(outputFolder, transformedFileName);
 
@@ -80,8 +82,7 @@ namespace SpecularNameFixer
                 {
                     // Copy the file to the output folder with the transformed name
                     File.Copy(filePath, transformedSpcPath, true);
-                    Console.WriteLine($"File processed: {fileName} -> {transformedFileName}");
-                    processedFilesCount++;
+                    ++specularConvertCount;
 
                     // Generate the `_cos` file based on the alpha channel of `_spc`
                     GenerateCosFile(filePath, outputFolder, transformedFileName);
@@ -92,7 +93,7 @@ namespace SpecularNameFixer
                 }
             }
 
-            Console.WriteLine($"\nProcessing complete! Total files converted: {processedFilesCount}");
+            Console.WriteLine($"\nProcessing complete! Total files converted: {specularConvertCount}");
             WaitForButtonPress();
         }
 
@@ -119,7 +120,6 @@ namespace SpecularNameFixer
                 Directory.CreateDirectory(outputFolder);
             }
 
-            int processedFilesCount = 0;
             string[] files = Directory.GetFiles(inputFolder);
 
             if (files.Length > 0)
@@ -150,6 +150,9 @@ namespace SpecularNameFixer
                     // Apply transformation to the file name
                     string transformedFileName = TransformFileName(fileName);
 
+                    // Log the transformation from original to the transformed name
+                    Console.WriteLine($"File processed: {fileName} -> {transformedFileName}");
+
                     // Create the output path for the renamed `_spc` file
                     string transformedSpcPath = Path.Combine(outputFolder, transformedFileName);
 
@@ -157,8 +160,7 @@ namespace SpecularNameFixer
                     {
                         // Copy the file to the output folder with the transformed name
                         File.Copy(file, transformedSpcPath, true);
-                        Console.WriteLine($"File processed: {fileName} -> {transformedFileName}");
-                        processedFilesCount++;
+                        ++specularConvertCount;
 
                         // Generate the `_cos` file based on the alpha channel of `_spc`
                         GenerateCosFile(file, outputFolder, transformedFileName);
@@ -169,7 +171,8 @@ namespace SpecularNameFixer
                     }
                 }
 
-                Console.WriteLine($"\nProcessing complete! Total files converted: {processedFilesCount}");
+                Console.WriteLine($"\nProcessing complete!\nTotal specular converted: {specularConvertCount}");
+                Console.WriteLine($"Total cosine images generated: {cosineConvertCount}");
             }
             else
             {
@@ -183,6 +186,20 @@ namespace SpecularNameFixer
         {
             try
             {
+                // Clean up the specular file name
+                string baseName = Path.GetFileNameWithoutExtension(spcFileName);
+                foreach (string keyword in keywords)
+                {
+                    baseName = Regex.Replace(baseName, Regex.Escape(keyword), "", RegexOptions.IgnoreCase);
+                }
+                baseName = baseName.TrimEnd('_'); // Remove trailing underscores
+
+                // Prepare the name for the new `_cos` file
+                string cosFileName = baseName + "_cos.png";
+
+                // Log the transformation from the specular to cosine image
+                //Console.WriteLine($"File processed: {spcFileName} -> {baseName + Path.GetExtension(spcFileName)}");
+
                 using (Bitmap spcImage = new Bitmap(spcFilePath))
                 {
                     // Create an empty image for the `_cos` output
@@ -201,27 +218,14 @@ namespace SpecularNameFixer
                         }
                     }
 
-                    // Generate the clean base name for the `_cos` file
-                    string baseName = Path.GetFileNameWithoutExtension(spcFileName);
-
-                    // Remove any specular-related keywords (case-insensitive) from the base name
-                    foreach (string keyword in keywords)
-                    {
-                        baseName = Regex.Replace(baseName, Regex.Escape(keyword), "", RegexOptions.IgnoreCase);
-                    }
-
-                    // Trim any trailing underscores after keyword removal
-                    baseName = baseName.TrimEnd('_');
-
-                    // Add `_cos` to the cleaned base name
-                    string cosFileName = baseName + "_cos.png";
-
                     // Save the `_cos` file
                     string cosFilePath = Path.Combine(outputFolder, cosFileName);
                     cosImage.Save(cosFilePath, ImageFormat.Png);
                     cosImage.Dispose();
 
-                    Console.WriteLine($"Generated '_cos' file: {cosFileName}");
+                    // Log the creation of the `_cos` file
+                    Console.WriteLine($"File processed: {baseName + "_spc" + Path.GetExtension(spcFileName)} -> {cosFileName}\n");
+                    ++cosineConvertCount;
                 }
             }
             catch (Exception ex)
@@ -229,7 +233,6 @@ namespace SpecularNameFixer
                 Console.WriteLine($"Error generating '_cos' file: {ex.Message}");
             }
         }
-
 
         // Helper methods
         private static bool IsImageFile(string extension)
