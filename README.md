@@ -50,7 +50,6 @@ File processed: delta_alpha_a_spc.png -> delta_alpha_a_cos.png
 
 ## Troubleshooting:
 - **No Input Folder:** If the `_input` folder doesn’t exist, the tool will create it for you.
-- **No Files Found:** Ensure your specular images are named correctly with `_spec`, `_spc`, or `_s` in the filename and placed in the `_input` folder.
 - **Errors during Processing:** If any file fails to process, the tool will display an error message with details.
 
 ## Contributing:
