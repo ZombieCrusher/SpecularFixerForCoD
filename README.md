@@ -27,10 +27,10 @@ This tool helps you to quickly fix the names of specular images for Call of Duty
 - Simply drag and drop your specular images onto the tool's `.exe` file to start processing.
 - The tool will automatically move the fixed images to a folder called `_output`.
 
-#### Method 2: Command Line
-- If you prefer using the command line:
-  - Open a terminal window in the folder where the tool is located.
-  - Run the tool using: `dotnet SpecularNameFixer.dll` (if using .NET 9).
+#### Method 2: Running the Application
+- If you prefer running the application:
+  - Place your images in `_input` folder , if not there , exe will generate automtically.
+  - Restart the application after having the images in `_input` folder.
   - The program will ask you to place your images into the `_input` folder, and it will process them accordingly.
 
 ### 4. What Happens During Processing
